@@ -2,7 +2,9 @@ from pathlib import Path
 import sys
 
 
-def check_word(grid: list[str], start: tuple[int, int], direction: tuple[int, int]) -> bool:
+def check_word(
+    grid: list[str], start: tuple[int, int], direction: tuple[int, int]
+) -> bool:
     x, y = start
     dx, dy = direction
     for i, c in enumerate("XMAS"):
@@ -15,13 +17,23 @@ def check_word(grid: list[str], start: tuple[int, int], direction: tuple[int, in
 
     return True
 
-DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1),  (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
 
 def check_cross(grid: list[str], start: tuple[int, int]) -> bool:
     x, y = start
-    if x < 1 or y < 1 or x >= len(grid[0]) - 1 or y >= len(grid) -1 or grid[y][x] != "A":
+    if (
+        x < 1
+        or y < 1
+        or x >= len(grid[0]) - 1
+        or y >= len(grid) - 1
+        or grid[y][x] != "A"
+    ):
         return False
-    diags = "".join((grid[y-1][x-1], grid[y-1][x+1], grid[y+1][x+1], grid[y+1][x-1]))
+    diags = "".join(
+        (grid[y - 1][x - 1], grid[y - 1][x + 1], grid[y + 1][x + 1], grid[y + 1][x - 1])
+    )
     valids = ("MMSS", "MSSM", "SMMS", "SSMM")
     if diags in valids:
         return True
@@ -35,7 +47,7 @@ def run(input: str) -> tuple[int, int]:
     for y, row in enumerate(grid):
         for x, _ in enumerate(row):
             for dir in DIRECTIONS:
-                part1 += (check_word(grid, (x, y), dir))
+                part1 += check_word(grid, (x, y), dir)
             part2 += check_cross(grid, (x, y))
 
     return part1, part2

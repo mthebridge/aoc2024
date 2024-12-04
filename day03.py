@@ -9,7 +9,7 @@ DISABLED = "don't()"
 
 def get_all_mults(input: str) -> int:
     pairs = VALID_MULTS.findall(input)
-    return sum((int(a) * int(b) for  a, b in pairs))
+    return sum((int(a) * int(b) for a, b in pairs))
 
 
 def run(input: str) -> tuple[int, int]:
@@ -23,7 +23,7 @@ def run(input: str) -> tuple[int, int]:
         if enabled:
             next_dis = input[i:].find(DISABLED)
             end_range = i + next_dis if next_dis != -1 else len(input)
-            part2 += get_all_mults(input[last_start:end_range + 5])
+            part2 += get_all_mults(input[last_start : end_range + 5])
             i = end_range + len(DISABLED)
             enabled = False
         else:
@@ -38,4 +38,3 @@ def run(input: str) -> tuple[int, int]:
 if __name__ == "__main__":
     p1, p2 = run(Path(sys.argv[1]).read_text())
     print(f"Part 1: {p1}, Part 2: {p2}")
-
