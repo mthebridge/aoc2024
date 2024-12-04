@@ -1,29 +1,38 @@
 from pathlib import Path
+import itertools
 import sys
 
 
-def parse_line(line: str) -> list[int]:
+def line_entries(line: str) -> list[int]:
     words = line.split()
-    return map(int, words)
+    return list(map(int, words))
 
-def level_safe(input: list[str], dampener: bool) -> bool:
-    lvl = list(parse_line(input))
-    asc = lvl[1] > lvl[0]
-    seen_bad = False
-    for i in range(1, len(lvl)):
-        diff = lvl[i] - lvl[i-1]
-        if (asc and diff < 0) or (not asc and diff > 0) or abs(diff) < 1 or abs(diff) > 3:
-            if dampener and not seen_bad:
-                seen_bad = True
-            else:
-                return False
 
-    return True
+def diffs_safe(lvl_diffs: list[int]) -> bool:
+    asc = lvl_diffs[0] > 0
+
+    good = lambda x: (asc and x >= 1 and x <= 3) or (not asc and x <= -1 and x >= -3)
+    return all(map(good, lvl_diffs))
+
+
+def level_safe(input: list[int], dampener: bool) -> bool:
+    lvl_diffs = list(map(lambda x: x[1] - x[0], itertools.pairwise(input)))
+
+    if diffs_safe(lvl_diffs):
+        return True
+    elif dampener:
+        for i in range(len(input)):
+            new = input.copy()
+            _ = new.pop(i)
+            if level_safe(new, False):
+                return True
+    return False
 
 
 def run(input: str) -> tuple[int, int]:
-    part1 = len(list(filter(lambda x: level_safe(x, False), input.splitlines())))
-    part2 = len(list(filter(lambda x: level_safe(x, True), input.splitlines())))
+    lines = list(map(line_entries, input.splitlines()))
+    part1 = len(list(filter(lambda x: level_safe(x, False), lines)))
+    part2 = len(list(filter(lambda x: level_safe(x, True), lines)))
     return part1, part2
 
 
