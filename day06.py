@@ -1,17 +1,34 @@
 from pathlib import Path
 import sys
+import copy
+from typing import Optional
 
 
-START_MARKER = '^'
-WALL = '#'
-FLOOR = '.'
+START_MARKER = "^"
+WALL = "#"
+FLOOR = "."
 
-def walk_line(grid: list[str], visited: set[tuple[int, int, str]], start: tuple[int, int], dir: str):
+
+class InfiniteLoop(Exception):
+    pass
+
+
+def walk_line(
+    grid: list[str],
+    visited: set[tuple[int, int]],
+    start: tuple[int, int],
+    dir: str,
+    path: set[tuple[int, int, str]],
+) -> Optional[tuple[int, int]]:
     cur = start
     i = 1
-    loops = 0
     while True:
+        cur_with_dir = (cur[0], cur[1], dir)
         visited.add(cur)
+        if cur_with_dir in path:
+            # Loop!
+            raise InfiniteLoop
+        path.add(cur_with_dir)
         if dir == "N":
             next = (cur[0], cur[1] - 1)
         elif dir == "E":
@@ -23,18 +40,23 @@ def walk_line(grid: list[str], visited: set[tuple[int, int, str]], start: tuple[
         else:
             raise ValueError("bad dir")
 
-        if next[0] < 0 or next[0] >= len(grid[0]) or next[1] < 0 or next[1] >= len(grid) :
-            return (None, loops)
+        if (
+            next[0] < 0
+            or next[0] >= len(grid[0])
+            or next[1] < 0
+            or next[1] >= len(grid)
+        ):
+            return None
 
         next_val = grid[next[1]][next[0]]
         if next_val == WALL:
             break
 
-
         cur = next
         i += 1
 
-    return (cur, loops)
+    return cur
+
 
 def next_dir(dir):
     if dir == "N":
@@ -49,6 +71,17 @@ def next_dir(dir):
         raise ValueError("Invalid direction")
 
 
+def do_walk(grid, start_x, start_y):
+    cur = (start_x, start_y)
+    visited = set()
+    path = set()
+    dir = "N"
+    while cur is not None:
+        cur = walk_line(grid, visited, cur, dir, path)
+        dir = next_dir(dir)
+    return visited
+
+
 def run(input: str) -> tuple[int, int]:
     grid = list(input.splitlines())
 
@@ -59,16 +92,19 @@ def run(input: str) -> tuple[int, int]:
         except ValueError:
             pass
 
-    visited = set()
-    cur = (start_x, start_y)
-    dir = "N"
-    part2 = 0
-    while cur is not None:
-        (cur, loops) = walk_line(grid, visited, cur, dir)
-        part2 += loops
-        dir = next_dir(dir)
-
+    visited = do_walk(grid, start_x, start_y)
     part1 = len(visited)
+    part2 = 0
+    for x, y in visited:
+        if grid[y][x] == FLOOR:
+            new_grid = copy.copy(grid)
+            row = new_grid[y]
+            new_grid[y] = row[:x] + WALL + row[x + 1 :]
+            try:
+                do_walk(new_grid, start_x, start_y)
+            except InfiniteLoop:
+                part2 += 1
+
     return part1, part2
 
 
