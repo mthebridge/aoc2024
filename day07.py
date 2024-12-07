@@ -28,7 +28,15 @@ def check_valid(line: str, allow_concat: bool) -> int:
         next = rem.pop(0)
         candidates = [so_far + next, so_far * next]
         if allow_concat:
-            candidates.append(int(str(so_far) + str(next)))
+            cand = so_far
+            n = next
+            while n > 0:
+                cand *= 10
+                n //= 10
+            candidates.append(cand + next)
+            # Easy but slow option:
+            # candidates.append(int(str(so_far) + str(next)))
+
         for c in candidates:
             if c <= target:
                 to_check.append([c, *rem])
