@@ -26,28 +26,26 @@ class InfiniteLoop(Exception):
 
 def walk_line(
     grid: list[str],
-    visited: set[tuple[int, int]],
+    path: set[tuple[int, int]],
     start: tuple[int, int],
     dir: str,
-    path: set[tuple[int, int, str]],
 ) -> Optional[tuple[int, int]]:
-    cur = start
+    cur = (start[0], start[1], dir)
     i = 1
     while True:
-        cur_with_dir = (cur[0], cur[1], dir)
-        visited.add(cur)
-        if cur_with_dir in path:
+        if cur in path:
             # Loop!
             raise InfiniteLoop
-        path.add(cur_with_dir)
+        path.add(cur)
+
         if dir == "N":
-            next = (cur[0], cur[1] - 1)
+            next = (cur[0], cur[1] - 1, dir)
         elif dir == "E":
-            next = (cur[0] + 1, cur[1])
+            next = (cur[0] + 1, cur[1], dir)
         elif dir == "S":
-            next = (cur[0], cur[1] + 1)
+            next = (cur[0], cur[1] + 1, dir)
         elif dir == "W":
-            next = (cur[0] - 1, cur[1])
+            next = (cur[0] - 1, cur[1], dir)
         else:
             raise ValueError("bad dir")
 
@@ -84,13 +82,12 @@ def next_dir(dir):
 
 def do_walk(grid, start_x, start_y):
     cur = (start_x, start_y)
-    visited = set()
     path = set()
     dir = "N"
     while cur is not None:
-        cur = walk_line(grid, visited, cur, dir, path)
+        cur = walk_line(grid, path, cur, dir)
         dir = next_dir(dir)
-    return visited
+    return path
 
 
 def run(input: str) -> tuple[int, int]:
@@ -103,10 +100,14 @@ def run(input: str) -> tuple[int, int]:
         except ValueError:
             pass
 
-    visited = do_walk(grid, start_x, start_y)
+    path = do_walk(grid, start_x, start_y)
+    visited = set(((x, y) for (x, y, _) in path))
     part1 = len(visited)
     part2 = 0
-    for x, y in visited:
+    for (
+        x,
+        y,
+    ) in visited:
         if grid[y][x] == START_MARKER:
             continue
         grid[y][x] = WALL
