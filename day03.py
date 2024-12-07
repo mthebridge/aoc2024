@@ -1,6 +1,14 @@
+"""
+Part 1 today was made for regex matching.
+
+Gave up on trying to get a valid multiline regex for part 2 so simply scanned through for
+the enable/disable instruction types and re-run aprt1 code each time we end a section.
+"""
+
 from pathlib import Path
 import re
 import sys
+
 
 VALID_MULTS = re.compile(r"mul\((\d+),(\d+)\)")
 ENABLED = "do()"
@@ -13,7 +21,6 @@ def get_all_mults(input: str) -> int:
 
 
 def run(input: str) -> tuple[int, int]:
-    pairs = VALID_MULTS.findall(input)
     part1 = get_all_mults(input)
     part2 = 0
     enabled = True

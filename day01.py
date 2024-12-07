@@ -1,3 +1,9 @@
+"""
+A gentle starter.
+
+Simply implement the given algorithm.  Python's ierable functions make things concise here.
+"""
+
 from pathlib import Path
 import sys
 

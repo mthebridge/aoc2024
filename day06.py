@@ -1,3 +1,14 @@
+"""
+AOC at its core - grid and pathfinding.
+
+Part 2 is super slow (10s) but the general online consensus is there's no clever trick - you do
+to some extent just have to try every option.
+
+Some cacheing would help - if you were to store the full path taken in order, you could start each iteration for
+part 2 at the point in the path where the new obstacle was first hit rtaher than constantly recalculating.
+Potential fix for future!
+"""
+
 from pathlib import Path
 import sys
 import copy

@@ -1,3 +1,11 @@
+"""
+A straightofrward part 1.
+
+Part 2 held me up for a while as I tried to find a clever algorithm that didn't involve n^2
+brute force.   I did not succeed, and since linesa re short the "just try removing every entry"
+approach works well enough.
+"""
+
 from pathlib import Path
 import itertools
 import sys
