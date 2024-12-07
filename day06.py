@@ -95,7 +95,7 @@ def run(input: str) -> tuple[int, int]:
     visited = do_walk(grid, start_x, start_y)
     part1 = len(visited)
     part2 = 0
-    for x, y in visited :
+    for x, y in visited:
         if grid[y][x] == START_MARKER:
             continue
         grid[y][x] = WALL
@@ -103,7 +103,7 @@ def run(input: str) -> tuple[int, int]:
             do_walk(grid, start_x, start_y)
         except InfiniteLoop:
             part2 += 1
-        grid[y][x] = FLOOR # Undo change
+        grid[y][x] = FLOOR  # Undo change
 
     return part1, part2
 

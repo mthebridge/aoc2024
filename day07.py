@@ -6,7 +6,7 @@ import sys
 
 def parse_line(line: str) -> Tuple[int, list[int]]:
     words = line.split()
-    target = int(words[0].rstrip(':'))
+    target = int(words[0].rstrip(":"))
     ops: list[int] = list(map(int, words[1:]))
     return target, ops
 
@@ -35,8 +35,8 @@ def check_valid(line: str, allow_concat: bool) -> int:
 
     return 0
 
-def run(input: str) -> tuple[int, int]:
 
+def run(input: str) -> tuple[int, int]:
     part1 = sum(map(lambda x: check_valid(x, False), input.splitlines()))
     part2 = sum(map(lambda x: check_valid(x, True), input.splitlines()))
     return part1, part2

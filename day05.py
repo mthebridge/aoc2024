@@ -8,7 +8,7 @@ def parse_line(line: str) -> tuple[int, int]:
     return int(words[0]), int(words[1])
 
 
-def check_valid(pages: list[str], rule_map: dict[str, str]) -> bool:
+def check_valid(pages: list[str], rule_map: dict[str, list[str]]) -> bool:
     # Check pairwise.  Since map holds before -> after direction,
     # check for violations by looking for any of the preceding elements.
     for i, v in enumerate(pages):
@@ -17,7 +17,7 @@ def check_valid(pages: list[str], rule_map: dict[str, str]) -> bool:
     return True
 
 
-def sort_pages(pages: list[str], rule_map: dict[str, str]) -> list[str]:
+def sort_pages(pages: list[str], rule_map: dict[str, list[str]]) -> list[str]:
     # Topological DFS sort.  Lifted straight from Wikipedia.
     # This actually sorts in reverse order, but since we only need
     # the middle item this is fine.

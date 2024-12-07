@@ -1,1 +1,1 @@
-Wuick and dirty Python solutions for https://adventofcode.com/2024
+Quick and dirty Python solutions for https://adventofcode.com/2024
