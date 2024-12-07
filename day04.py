@@ -46,8 +46,7 @@ def run(input: str) -> tuple[int, int]:
     part2 = 0
     for y, row in enumerate(grid):
         for x, _ in enumerate(row):
-            for dir in DIRECTIONS:
-                part1 += check_word(grid, (x, y), dir)
+            part1 += sum(check_word(grid, (x, y), dir) for dir in DIRECTIONS)
             part2 += check_cross(grid, (x, y))
 
     return part1, part2

@@ -83,7 +83,7 @@ def do_walk(grid, start_x, start_y):
 
 
 def run(input: str) -> tuple[int, int]:
-    grid = list(input.splitlines())
+    grid = list(map(list, input.splitlines()))
 
     for start_y, row in enumerate(grid):
         try:
@@ -95,15 +95,15 @@ def run(input: str) -> tuple[int, int]:
     visited = do_walk(grid, start_x, start_y)
     part1 = len(visited)
     part2 = 0
-    for x, y in visited:
-        if grid[y][x] == FLOOR:
-            new_grid = copy.copy(grid)
-            row = new_grid[y]
-            new_grid[y] = row[:x] + WALL + row[x + 1 :]
-            try:
-                do_walk(new_grid, start_x, start_y)
-            except InfiniteLoop:
-                part2 += 1
+    for x, y in visited :
+        if grid[y][x] == START_MARKER:
+            continue
+        grid[y][x] = WALL
+        try:
+            do_walk(grid, start_x, start_y)
+        except InfiniteLoop:
+            part2 += 1
+        grid[y][x] = FLOOR # Undo change
 
     return part1, part2
 
