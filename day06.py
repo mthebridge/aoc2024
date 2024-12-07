@@ -26,10 +26,12 @@ class InfiniteLoop(Exception):
 
 def walk_line(
     grid: list[str],
-    path: set[tuple[int, int]],
+    maxh: int,
+    maxw: int,
+    path: set[tuple[int, int, str]],
     start: tuple[int, int],
     dir: str,
-) -> Optional[tuple[int, int]]:
+) -> Optional[tuple[int, int, str]]:
     cur = (start[0], start[1], dir)
     i = 1
     while True:
@@ -49,12 +51,7 @@ def walk_line(
         else:
             raise ValueError("bad dir")
 
-        if (
-            next[0] < 0
-            or next[0] >= len(grid[0])
-            or next[1] < 0
-            or next[1] >= len(grid)
-        ):
+        if next[0] < 0 or next[0] >= maxw or next[1] < 0 or next[1] >= maxh:
             return None
 
         next_val = grid[next[1]][next[0]]
@@ -80,18 +77,21 @@ def next_dir(dir):
         raise ValueError("Invalid direction")
 
 
-def do_walk(grid, start_x, start_y):
+def do_walk(grid, maxh, maxw, start_x, start_y):
     cur = (start_x, start_y)
     path = set()
     dir = "N"
+
     while cur is not None:
-        cur = walk_line(grid, path, cur, dir)
+        cur = walk_line(grid, maxh, maxw, path, cur, dir)
         dir = next_dir(dir)
     return path
 
 
 def run(input: str) -> tuple[int, int]:
     grid = list(map(list, input.splitlines()))
+    maxh = len(grid)
+    maxw = len(grid[0])
 
     for start_y, row in enumerate(grid):
         try:
@@ -100,7 +100,7 @@ def run(input: str) -> tuple[int, int]:
         except ValueError:
             pass
 
-    path = do_walk(grid, start_x, start_y)
+    path = do_walk(grid, maxh, maxw, start_x, start_y)
     visited = set(((x, y) for (x, y, _) in path))
     part1 = len(visited)
     part2 = 0
@@ -112,7 +112,7 @@ def run(input: str) -> tuple[int, int]:
             continue
         grid[y][x] = WALL
         try:
-            do_walk(grid, start_x, start_y)
+            do_walk(grid, maxh, maxw, start_x, start_y)
         except InfiniteLoop:
             part2 += 1
         grid[y][x] = FLOOR  # Undo change
