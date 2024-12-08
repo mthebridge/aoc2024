@@ -6,6 +6,7 @@ Think the trap here was to ensure you iterate over pairs of nodes, rather than i
 """
 
 from pathlib import Path
+import math
 import sys
 from collections import defaultdict
 
@@ -14,23 +15,31 @@ def get_antinodes(coords, max_h, max_w, part2: bool):
     def in_bounds(x, y):
         return x >= 0 and y >= 0 and x < max_w and y < max_h
 
-    # In part2, the nodes themselves are all antinodes as long as there are more than 2.
-    ret = set(coords) if part2 and len(coords) > 2 else set()
+    # In part2, the nodes themselves are all antinodes as long as there are more than 1.
+    ret = set(coords) if part2 and len(coords) > 1 else set()
     for i, (xa, ya) in enumerate(coords):
         for xb, yb in coords[i + 1 :]:
-            diffx, diffy = xa - xb, ya - yb
+            diffx, diffy = (xa - xb, ya - yb)
+            # Technically not needed since in the real input,
+            # the x/y offset for each node pair is coprime.
+            gcd = math.gcd(diffx, diffy)
+            diffx /= gcd
+            diffy /= gcd
             i = 1
             while True:
                 if i > max_h:
                     raise Exception("Probable bug - infinite loop")
-                # Note this is assuming that the x/y offset for each node pair is coprime.
-                # Fortunately, the puzzle seems to have been constructed so that is the case.
-                # If not, part2 would involve a lot more complexity...
-                candidates = (
-                    (xa + i * diffx, ya + i * diffy),
-                    (xb - i * diffx, yb - i * diffy),
+
+                candidates = set(
+                    c
+                    for c in (
+                        (
+                            (xa + i * diffx, ya + i * diffy),
+                            (xb - i * diffx, yb - i * diffy),
+                        )
+                    )
+                    if in_bounds(c[0], c[1])
                 )
-                candidates = set((c for c in candidates if in_bounds(c[0], c[1])))
                 ret.update(candidates)
                 if not part2 or not candidates:
                     break
