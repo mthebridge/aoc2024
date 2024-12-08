@@ -18,4 +18,4 @@ INPUT = """............
 def test_day8():
     p1, p2 = day08.run(INPUT)
     assert p1 == 14
-    assert p2 == 0
+    assert p2 == 34
