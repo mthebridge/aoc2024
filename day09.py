@@ -18,7 +18,9 @@ def get_file_data(input: list[int], idx: int) -> tuple[int, int]:
 
 def calc_csum(file_id: int, file_size: int, disk_pos: int) -> int:
     # The checksum is file_id * (sum of disk positions), which is an arithemtic sequence
-    return file_size * ((file_id * disk_pos) + (file_id * (disk_pos + file_size - 1))) // 2
+    return (
+        file_size * ((file_id * disk_pos) + (file_id * (disk_pos + file_size - 1))) // 2
+    )
 
 
 def defrag(original_input: list[int], entire_files: bool) -> int:
