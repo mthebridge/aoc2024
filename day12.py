@@ -8,9 +8,6 @@ import sys
 from typing import Self
 
 
-DEBUG_LETTER = "A"
-
-
 class Region:
     def __init__(self, letter: str, x: int, y: int):
         self.letter = letter
@@ -54,10 +51,6 @@ class Region:
                 # Connecting from both sides.  Number of sides can go *down*.
                 if not upper_right:
                     self.num_sides -= 2
-            if self.letter == DEBUG_LETTER:
-                print(
-                    f"Added {x},{y} (bordering {borders}), now area {self.area}, sides {self.num_sides}"
-                )
             return True
         return False
 
@@ -70,13 +63,11 @@ class Region:
         self.num_sides += other.num_sides
         # Merging implies that above and left were not touching until now.
         # We either lose zero or 2 sides.  It is zero only if the upper right was already in the shape,
-        # *and* we merged from the left:
+        # *and* we merged from the left (implying the sides we lose are "extended").
         from_left = ((x, y - 1)) in other.positions
         upper_right = (x + 1, y - 1) in self.positions
         if not upper_right or not from_left:
             self.num_sides -= 2
-        if self.letter == DEBUG_LETTER:
-            print(f"Merged from {x},{y}, now area {self.area}, sides {self.num_sides}")
 
     def __repr__(self):
         # Debugging help
@@ -86,12 +77,11 @@ class Region:
 
 def run(input: str) -> tuple[int, int]:
     grid = list(map(list, input.splitlines()))
-    regions = defaultdict(list)
+    regions: defaultdict[str, list[Region]] = defaultdict(list)
     for y, row in enumerate(grid):
         for x, letter in enumerate(row):
             candidates = regions[letter]
             region = None
-            # print(x, y, candidates)
             for c in candidates:
                 if region:
                     # Already merged with another region!
@@ -104,20 +94,9 @@ def run(input: str) -> tuple[int, int]:
                         region = c
 
             if not region:
-                # print(f"New region for {letter} at ({x},{y})")
                 regions[letter].append(Region(letter, x, y))
-                if letter == DEBUG_LETTER:
-                    print(f"New region at({x}, {y}), area 1, sides 4")
 
     part1 = sum(sum(region.price() for region in l) for l in regions.values())
-    print(
-        "\n".join(
-            [
-                "\n".join([f"{r.letter} = {r.area}, {r.num_sides}" for r in l])
-                for l in regions.values()
-            ]
-        )
-    )
     part2 = sum(sum(region.discount_price() for region in l) for l in regions.values())
     return part1, part2
 
