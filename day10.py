@@ -1,16 +1,15 @@
 """
-Thought we might need something cleverer but simply loop through the grid and DFS the trails.
+Thought we might need something cleverer but simply loop through the grid and DFS all options to
+fins the trails.
 Since we are only ever looking for neighbours with "N+1" the decision space never branches too much
 so just counting all the trails works fine.
-PArt 2 actually easier than aprt 1 - switch from sets to lists.
+
+Part 2 actually easier than part 1 - switch from sets to lists.
 """
 
 from pathlib import Path
 import sys
 from typing import Iterable
-
-
-import functools
 
 
 def run(input: str) -> tuple[int, int]:
