@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 
-def get_file_data(input: str, idx: int) -> tuple[int, int]:
+def get_file_data(input: list[int], idx: int) -> tuple[int, int]:
     assert idx % 2 == 0
     return idx // 2, input[idx]
 
