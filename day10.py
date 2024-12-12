@@ -28,9 +28,7 @@ def run(input: str) -> tuple[int, int]:
 
     def find_trail_ends(grid, x, y) -> Iterable[tuple[int, int]]:
         current = grid[y][x]
-        # print(f"Checking trail at {x}, {y} cur_height {current}")
         if current == TRAIL_END:
-            # print(f"Found trail end at ({x},{y})")
             yield (x, y)
         else:
             yield from (
@@ -47,7 +45,6 @@ def run(input: str) -> tuple[int, int]:
     for y in range(HEIGHT):
         for x in range(WIDTH):
             if grid[y][x] == TRAIL_START:
-                # print(f"Start at ({x},{y})")
                 trails = list(find_trail_ends(grid, x, y))
                 part1 += len(set(trails))
                 part2 += len(trails)
