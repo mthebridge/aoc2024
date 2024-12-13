@@ -1,5 +1,10 @@
 """
 Oof.  Counting edges is hard.  Worked it out from first principles.
+
+I quite like this algorithm - rather than build up region-by-region we build up
+cell-by-cell, allowing us to incrementally calculate area, perimeter and sides for
+each region.  This makes it quite efficient - we then just need to iterate over each region
+at the end to get the price.
 """
 
 from collections import defaultdict

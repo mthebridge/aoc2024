@@ -1,7 +1,7 @@
 """
-Again I wasn't super happy about the n@2 algorithms.
+Again I wasn't super happy about the n^2 algorithms.
 
-For part1 I think unavoidable, as you have to check each pair in case there's a rule for them.  I can see an option where
+For part 1 I think unavoidable, as you have to check each pair in case there's a rule for them.  I can see an option where
 rather than checking each pair in the page you check each rule one by one, but that feels clunkier.
 
 For part 2 I wavered at first at just implementing sort - but some quick refreshers on CS101 reminded me this is

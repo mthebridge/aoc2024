@@ -5,7 +5,7 @@ patterns - searching out for XMAS if an X, and checking for a centred cross if a
 Part 2 slowed me down due to misreading - I assumed +-shapes were also valid (there are none in the test input).
 Other than that, mainly just usual grid gotchas of bounds checking, x/y direction confusion.
 
-Helpful python fature of the day: sum() on an iterable of bools in Python is effectively a filter + count.
+Helpful python feature of the day: sum() on an iterable of bools in Python is effectively a filter + count.
 """
 
 from pathlib import Path

@@ -2,7 +2,7 @@
 Part 1 today was made for regex matching.
 
 Gave up on trying to get a valid multiline regex for part 2 so simply scanned through for
-the enable/disable instruction types and re-run aprt1 code each time we end a section.
+the enable/disable instruction types and re-run part 1 code each time we end a section.
 """
 
 from pathlib import Path

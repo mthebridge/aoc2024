@@ -1,12 +1,12 @@
 """
 I thought there was a general tendency in AOC for harder puzzles at weekends but this was qite gentle!
-We keep track of all the sum and product options so far, and add them to a queue of canddidates.
-Since we know the operators always increase in value we can terminate early as soona s we overshoot the target.
+We keep track of all the sum and product options so far, and add them to a queue of candidates.
+Since we know the operators always increase in value we can terminate early as soon as we overshoot the target.
 
 I worried we might have to start adding parentheses for part 2 but no, a relatively simple enhancement.
 
-Initialy did string cocnat as simpler and Python makes switching from int to string pretty easy - but we shave about 10%
-of the  runtime off if we do maths instead.
+Initialy did string concat as simpler and Python makes switching from int to string pretty easy - but we shave about 10%
+of the runtime off if we do maths instead.
 """
 
 from pathlib import Path
